@@ -1,0 +1,38 @@
+# Channel definitions shared by the seed generator, the MMM, the reconciliation layer and the allocator.
+# prior_roi_* is the fallback prior on incremental conversions per 1,000 units of spend when no geo test
+# covers the channel. Calibration targets from completed geo tests override these.
+channels:
+  - name: linear_tv
+    label: Linear TV
+    adstock_max_lag: 8
+    prior_decay_mean: 0.55
+    prior_roi_mean: 8.0
+    prior_roi_sd: 6.0
+  - name: ctv
+    label: CTV
+    adstock_max_lag: 6
+    prior_decay_mean: 0.45
+    prior_roi_mean: 10.0
+    prior_roi_sd: 8.0
+  - name: online_video
+    label: Online video
+    adstock_max_lag: 4
+    prior_decay_mean: 0.35
+    prior_roi_mean: 6.0
+    prior_roi_sd: 5.0
+  - name: paid_social
+    label: Paid social
+    adstock_max_lag: 3
+    prior_decay_mean: 0.25
+    prior_roi_mean: 10.0
+    prior_roi_sd: 8.0
+  - name: paid_search
+    label: Paid search
+    adstock_max_lag: 2
+    prior_decay_mean: 0.15
+    prior_roi_mean: 15.0
+    prior_roi_sd: 12.0
+controls:
+  - promo_depth
+  - competitor_grps
+  - price_index

@@ -1,0 +1,13 @@
+# Defaults for geo matched-market test design.
+design:
+  pre_period_weeks: 26
+  test_weeks: 6
+  controls_per_treatment: 3
+  min_pre_period_correlation: 0.6
+power:
+  simulations: 200
+  alpha: 0.1
+  candidate_lifts: [0.05, 0.10, 0.15, 0.20, 0.30]
+readout:
+  placebo_permutations: 50
+  confidence: 0.90

@@ -1,0 +1,15 @@
+# Spot-level TV response settings.
+baseline_window_minutes: 10
+response_window_minutes: 5
+# Minutes after an airing that are excluded from any later airing's baseline window.
+contamination_minutes: 8
+# Random clean minutes used to estimate how much lift the baseline-and-clip method finds in pure noise.
+# That expected noise lift is subtracted from every airing so aggregate attribution is not biased upward.
+placebo_samples: 400
+placebo_seed: 7
+dayparts:
+  early_morning: [5, 9]
+  daytime: [9, 16]
+  early_fringe: [16, 19]
+  prime: [19, 23]
+  late_night: [23, 29]

@@ -1,0 +1,33 @@
+# MMM fitting settings. The weekly refresh uses the "full" profile; tests and the Compose demo use "quick".
+profiles:
+  full:
+    num_chains: 2
+    num_warmup: 500
+    num_samples: 500
+    holdout_weeks: 8
+  quick:
+    num_chains: 1
+    num_warmup: 150
+    num_samples: 150
+    holdout_weeks: 6
+  test:
+    num_chains: 1
+    num_warmup: 150
+    num_samples: 100
+    holdout_weeks: 4
+seasonality:
+  fourier_order: 2
+  period_weeks: 52
+baseline:
+  # Prior on the share of outcomes that would occur with no paid media, from pre-media history or
+  # go-dark tests. The MMM intercept is centred here; without it the intercept absorbs media effect.
+  share_mean: 0.6
+  share_sd: 0.25
+hierarchy:
+  # Standard deviation prior on how far a market's channel coefficient may sit from the national mean (log scale).
+  market_sd_prior: 0.3
+calibration:
+  # Completed geo tests become likelihood terms on the model-implied incremental conversions for the tested
+  # channel, markets and weeks. The test's standard error is inflated by this factor to reflect that a geo
+  # read measures a specific period and creative mix rather than the long-run channel effect.
+  se_inflation: 1.25

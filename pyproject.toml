@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "integrated-marketing-measurement-stack"
+version = "0.4.0"
+description = "Hierarchical Bayesian MMM, geo matched-market tests, spot-level TV response and a harmonization layer, with an API and MCP server over the results."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Alex Kurinets" }]
+dependencies = [
+    "jax[cpu]>=0.4.30",
+    "numpyro>=0.15",
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "scipy>=1.11",
+    "pyyaml>=6.0",
+    "sqlalchemy>=2.0",
+    "psycopg[binary]>=3.1",
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "mcp>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+imms-seed = "seed.generate:main"
+imms-refresh = "measurement.pipeline.weekly:main"
+imms-api = "measurement.api.app:main"
+imms-mcp = "measurement.mcp_server.server:main"
+
+[tool.setuptools.packages.find]
+include = ["measurement*", "seed*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B008", "E741"]

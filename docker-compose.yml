@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: imms
+      POSTGRES_PASSWORD: imms
+      POSTGRES_DB: imms
+    ports:
+      - "${IMMS_DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U imms -d imms"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  seed:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://imms:imms@db:5432/imms
+    command: ["imms-seed", "--markets", "40", "--weeks", "104"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  refresh:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://imms:imms@db:5432/imms
+      VALUE_PER_CONVERSION: "180"
+    command: ["imms-refresh", "--profile", "quick"]
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://imms:imms@db:5432/imms
+      VALUE_PER_CONVERSION: "180"
+      API_PORT: "8000"
+    command: ["imms-api"]
+    ports:
+      - "${IMMS_API_PORT:-8000}:8000"
+    depends_on:
+      refresh:
+        condition: service_completed_successfully
+
+  mcp:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://imms:imms@db:5432/imms
+      VALUE_PER_CONVERSION: "180"
+      MCP_TRANSPORT: streamable-http
+      MCP_PORT: "8001"
+    command: ["imms-mcp"]
+    ports:
+      - "${IMMS_MCP_PORT:-8001}:8001"
+    depends_on:
+      refresh:
+        condition: service_completed_successfully
